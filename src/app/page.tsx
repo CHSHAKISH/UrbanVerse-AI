@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/layout/Sidebar"
 import { Navbar } from "@/components/layout/Navbar"
 import { MapWrapper } from "@/features/map/MapWrapper"
 import { ZoneInfoCard } from "@/features/map/ZoneInfoCard"
+import { AIPlanningPanel } from "@/features/ai/AIPlanningPanel"
 import { motion, AnimatePresence } from "framer-motion"
 
 export default function DashboardPage() {
@@ -27,7 +28,10 @@ export default function DashboardPage() {
             {selectedZone && <ZoneInfoCard zone={selectedZone} />}
           </AnimatePresence>
 
-          {/* Welcome overlay - shown when no zone is selected */}
+          {/* AI Planning Panel — slides in over map when zone is selected */}
+          {selectedZone && <AIPlanningPanel zone={selectedZone} />}
+
+          {/* Welcome pill — shown when no zone is selected */}
           <AnimatePresence>
             {!selectedZone && (
               <motion.div
@@ -51,3 +55,4 @@ export default function DashboardPage() {
     </div>
   )
 }
+
