@@ -22,7 +22,7 @@ export function Navbar() {
         {selectedZone && (
           <Badge
             className="text-xs"
-            style={{ backgroundColor: `${selectedZone.color}22`, color: selectedZone.color, borderColor: `${selectedZone.color}44`, border: "1px solid" }}
+            style={{ backgroundColor: `${selectedZone.color}22`, color: selectedZone.color, borderColor: `${selectedZone.color}44`, borderWidth: "1px", borderStyle: "solid" }}
           >
             {selectedZone.name}
           </Badge>
