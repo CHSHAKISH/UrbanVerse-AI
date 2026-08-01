@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { format } from "date-fns"
@@ -140,7 +140,7 @@ function CustomTooltip({ active, payload }: any) {
   )
 }
 
-export default function ComparePage() {
+function CompareContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [scenarios, setScenarios] = useState<[ScenarioRecord, ScenarioRecord] | null>(null)
@@ -491,5 +491,13 @@ export default function ComparePage() {
         </main>
       </div>
     </div>
+  )
+}
+
+export default function ComparePage() {
+  return (
+    <Suspense fallback={<div className="flex h-screen w-screen items-center justify-center bg-background"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+      <CompareContent />
+    </Suspense>
   )
 }
