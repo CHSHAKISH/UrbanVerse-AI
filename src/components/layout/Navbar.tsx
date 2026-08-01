@@ -2,9 +2,9 @@
 
 import { useUrbanStore } from "@/store/useUrbanStore"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Bell, Map, Sun, Moon } from "lucide-react"
+import { Bell, Map, Sun, Moon, LogOut } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import { useEffect, useState } from "react"
 
 export function Navbar() {
@@ -79,6 +79,15 @@ export function Navbar() {
             {session?.user?.name ?? "Planner"}
           </span>
         </div>
+
+        {/* Log Out */}
+        <button
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          className="ml-1 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
+          title="Log out"
+        >
+          <LogOut className="h-4 w-4" />
+        </button>
       </div>
     </header>
   )
