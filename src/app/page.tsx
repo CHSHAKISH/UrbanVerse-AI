@@ -41,9 +41,9 @@ export default function DashboardPage() {
                 transition={{ duration: 0.3 }}
                 className="absolute left-1/2 top-6 z-[1000] -translate-x-1/2"
               >
-                <div className="flex items-center gap-2 rounded-full border border-white/10 bg-gray-950/80 px-4 py-2 shadow-xl backdrop-blur-md">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-blue-400" />
-                  <span className="text-sm text-gray-300">
+                <div className="flex items-center gap-2 rounded-full border border-border bg-background/95 px-4 py-2 shadow-xl backdrop-blur-md">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+                  <span className="text-sm text-foreground/80 font-medium">
                     Click a zone on the map to begin analysis
                   </span>
                 </div>

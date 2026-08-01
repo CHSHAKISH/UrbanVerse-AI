@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { MapContainer, TileLayer, Polygon, Tooltip } from "react-leaflet"
+import { useTheme } from "next-themes"
 import { CITY_ZONES, CityZone } from "@/config/zones"
 import { useUrbanStore } from "@/store/useUrbanStore"
 import "leaflet/dist/leaflet.css"
@@ -17,8 +18,21 @@ L.Icon.Default.mergeOptions({
 
 const CITY_CENTER: [number, number] = [12.9700, 77.5900]
 
+// Helper to darken colors for light mode borders
+function getDarkerColor(hex: string): string {
+  let color = hex.replace("#", "")
+  if (color.length === 3) color = color.split("").map((c) => c + c).join("")
+  const num = parseInt(color, 16)
+  const r = Math.max(0, Math.round((num >> 16) * 0.5))
+  const g = Math.max(0, Math.round(((num >> 8) & 0x00ff) * 0.5))
+  const b = Math.max(0, Math.round((num & 0x0000ff) * 0.5))
+  return "#" + (0x1000000 + (r << 16) + (g << 8) + b).toString(16).slice(1)
+}
+
 export default function InteractiveMap() {
   const { selectedZone, setSelectedZone, setIsAIPanelOpen } = useUrbanStore()
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
 
   const handleZoneClick = (zone: CityZone) => {
     setSelectedZone(zone)
@@ -33,22 +47,29 @@ export default function InteractiveMap() {
       zoomControl={true}
     >
       <TileLayer
+        key={isDark ? "dark" : "light"}
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        url={
+          isDark
+            ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        }
       />
 
       {CITY_ZONES.map((zone) => {
         const isSelected = selectedZone?.id === zone.id
+        const borderColor = isDark ? zone.color : getDarkerColor(zone.color)
+        
         return (
           <Polygon
             key={zone.id}
             positions={zone.polygon}
             pathOptions={{
-              color: zone.color,
+              color: borderColor,
               fillColor: zone.color,
               fillOpacity: isSelected ? 0.45 : 0.25,
               weight: isSelected ? 3 : 1.5,
-              opacity: isSelected ? 1 : 0.7,
+              opacity: isSelected ? 1 : 0.8,
             }}
             eventHandlers={{
               click: () => handleZoneClick(zone),
@@ -67,7 +88,7 @@ export default function InteractiveMap() {
               permanent
               className="zone-label"
             >
-              <span className="text-[11px] font-semibold" style={{ color: zone.color }}>
+              <span className="text-[11px] font-semibold" style={{ color: borderColor }}>
                 {zone.name}
               </span>
             </Tooltip>
